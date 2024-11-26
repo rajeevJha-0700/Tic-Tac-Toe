@@ -1,0 +1,122 @@
+let player1 ;
+let  player2 ;
+let currentPlayer ;
+
+let myOption = document.querySelectorAll(".opt");// it will return a nodeList of option -> X and O
+let myGame = document.querySelectorAll(".cell");
+let node_1 = document.querySelector("#X");
+let node_2 = document.querySelector("#O");
+let resetButton = document.querySelector("#reset");
+
+//accessing all button id's
+let my_0 = document.querySelector("#my_0");
+let my_1 = document.querySelector("#my_1");
+let my_2 = document.querySelector("#my_2");
+let my_3 = document.querySelector("#my_3");
+let my_4 = document.querySelector("#my_4");
+let my_5 = document.querySelector("#my_5");
+let my_6 = document.querySelector("#my_6");
+let my_7 = document.querySelector("#my_7");
+let my_8 = document.querySelector("#my_8");
+
+//selecting any one from nodeList
+alert("choose either X or O");
+
+myOption.forEach(
+    (insiders)=>{
+        //click to choose any one option 
+        insiders.addEventListener("click",()=>{
+            
+            if(insiders.id==="X"){
+                console.log("X is selected");
+                player1 = "X";
+                player2 = "O";
+                currentPlayer = player1;//sets the current player
+                removeNodeList();  //this will remove both options
+            }
+
+
+            if(insiders.id==="O"){
+                console.log("O is selected");
+                player1 = "O";
+                player2 = "X"
+                currentPlayer = player1;//sets the current player
+                removeNodeList();  //this will remove both options
+            }
+        })
+
+    }
+)
+
+//removing the whole nodelist
+function removeNodeList() {
+    myOption.forEach(
+        (removeBoth)=>{
+            removeBoth.addEventListener("mouseout",()=>{
+                node_1.remove();
+                node_2.remove();
+            })
+        }
+    )
+    myGame.forEach(
+        (cells)=>{
+            cells.innerHTML = "";
+        }
+    )
+}
+
+//gamelogic
+gameLogic();
+
+    function gameLogic(){
+        myGame.forEach(
+            (cell)=>{
+                cell.addEventListener(
+                    "click", ()=>{
+                        if(cell.innerText==="" && currentPlayer){
+                            cell.innerText = currentPlayer;
+                            currentPlayer = ( currentPlayer === player1 ) ? player2 : player1 ;
+                            winSequence();
+                            
+                        } 
+                    }
+                )
+            }
+        )
+    }
+
+
+ function winSequence(){
+    if(
+    (my_0.innerText === my_1.innerText && my_0.innerText === my_2.innerText && my_0.innerText!=="") ||
+    (my_3.innerText === my_4.innerText && my_3.innerText === my_5.innerText && my_3.innerText!=="") ||
+    (my_6.innerText === my_7.innerText && my_6.innerText === my_8.innerText && my_6.innerText!=="") ||
+    (my_0.innerText === my_3.innerText && my_0.innerText === my_6.innerText && my_0.innerText!=="") ||
+    (my_1.innerText === my_4.innerText && my_1.innerText === my_7.innerText && my_1.innerText!=="") ||
+    (my_2.innerText === my_5.innerText && my_2.innerText === my_8.innerText && my_2.innerText!=="") ||
+    (my_0.innerText === my_4.innerText && my_0.innerText === my_8.innerText && my_0.innerText!=="") ||
+    (my_2.innerText === my_4.innerText && my_2.innerText === my_6.innerText && my_2.innerText!=="")
+  ){
+     currentPlayer = currentPlayer === player1 ? player2 : player1 ;
+     console.log(`congratulations ${currentPlayer}`);
+     alert(`${currentPlayer} won ....`);
+     setTimeout(
+        ()=>{location.reload()},3000
+     )
+   } else{
+    gameLogic();
+   }
+ }
+
+//manual reset
+resetButton.addEventListener(
+    "click",()=>{
+        myGame.forEach(
+            (cells)=>{
+                cells.innerText = "";
+                currentPlayer = player1;
+                gameLogic();
+            }
+        )
+    }
+)
